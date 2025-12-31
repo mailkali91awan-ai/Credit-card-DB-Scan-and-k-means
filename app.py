@@ -7,7 +7,7 @@ st.set_page_config(page_title="Credit Card Clustering", layout="wide")
 
 @st.cache_resource
 def load_artifact():
-    artifact = joblib.load("credit_clustering_models.pkl")
+    artifact = joblib.load("credit_clustering_models_simple.pkl")
     return artifact
 
 @st.cache_data
@@ -15,12 +15,13 @@ def load_data():
     # If you're storing the CSV in the repo
     df = pd.read_csv("Credit Card Customer Data.csv")
     return df
-
+    
 artifact = load_artifact()
-preprocessor = artifact["preprocessor"]
 kmeans = artifact["kmeans"]
 dbscan = artifact["dbscan"]
 feature_columns = artifact["feature_columns"]
+kmeans_labels = artifact["kmeans_labels"]
+dbscan_labels = artifact["dbscan_labels"]
 
 st.title("Credit Card Customers – K‑Means vs DBSCAN")
 
@@ -58,4 +59,5 @@ coords_df = pd.DataFrame(coords, columns=["PC1", "PC2"])
 coords_df["cluster"] = labels
 
 st.write("2D PCA scatter by cluster:")
+
 st.scatter_chart(coords_df, x="PC1", y="PC2", color="cluster")
